@@ -1,6 +1,9 @@
 # Class creation
 class Kettle(object):
 
+    # class variable -- all instances of the class will share this variable
+    power_source = "electricity"
+
     # __init__ is the constructor
     # self is a reference to the INSTANCE of the class
     def __init__(self, make, price):
@@ -49,8 +52,21 @@ print(kenwood.on)
 print("*" * 80)
 
 # like everything in Python, classes are dynamic. This means, you can
-# modify classes after creation/instansiation
+# modify objects after instansiation
 
 # new attribute power
 kenwood.power = 1.5
 print(kenwood.power)
+
+print("Switch to atomic power")
+# Will change the attribute FOR ALL INSTANCES of the class
+Kettle.power_source = "Atomic"
+print(Kettle.power_source)
+print("Switch kenwood to gas")
+kenwood.power_source = "Gas"
+print(kenwood.power_source)
+print(hamilton.power_source)
+# the .__dict__ method shows a breakdown of the object
+print(Kettle.__dict__)
+print(kenwood.__dict__)
+print(hamilton.__dict__)
