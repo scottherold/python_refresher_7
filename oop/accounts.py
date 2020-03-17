@@ -1,6 +1,7 @@
 import datetime
 import pytz
 
+
 # encapsulation demonstration with bank accounts
 class Account:
     # Its a good habit to use the below syntax as a descriptor for
@@ -15,36 +16,36 @@ class Account:
         return pytz.utc.localize(utc_time)
 
     def __init__(self, name, balance):
-        self.name = name
-        self.balance = balance
-        self.transation_list = []
-        print("Account created " + self.name)
+        self._name = name
+        self._balance = balance
+        self._transation_list = [(Account._current_time(), balance)]
+        print("Account created " + self._name)
 
     def deposit(self, amount):
         if amount > 0:
-            self.balance += amount
+            self._balance += amount
             self.show_balance()
-            self.transation_list.append((Account._current_time(), amount))
+            self._transation_list.append((Account._current_time(), amount))
 
     def withdraw(self, amount):
-        if 0 < amount <= self.balance:
-            self. balance -= amount
-            self.transation_list.append((Account._current_time(), -amount))
+        if 0 < amount <= self._balance:
+            self._balance -= amount
+            self._transation_list.append((Account._current_time(), -amount))
         else:
             print("Amount must be greater than zero and no more than your account balance")
         self.show_balance()
 
     def show_balance(self):
-        print("Balance is {}".format(self.balance))
+        print("Balance is {}".format(self._balance))
 
     def show_transactions(self):
         # since pytz produces a tuple, you can unpack the tuple with the
         # for loop
-        for date, amount in self.transation_list:
+        for date, amount in self._transation_list:
             if amount > 0:
                 tran_type = "deposited"
             else:
-                tran_Type = "withdrawn"
+                tran_type = "withdrawn"
                 amount *= -1
             print("{:6} {} on {} (local time was {})".format(amount, tran_type, date, date.astimezone()))
 
@@ -59,3 +60,8 @@ if __name__ == '__main__':
     scott.withdraw(2000)
 
     scott.show_transactions()
+
+    steph = Account("Steph", 800)
+    steph.deposit(100)
+    steph.withdraw(200)
+    steph.show_transactions()
