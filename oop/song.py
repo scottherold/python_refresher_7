@@ -48,7 +48,8 @@ class Album:
             song (Song): A song to add.
             position (Optional[int]): If specified, the song will added to that
                 position in tracks - inserting it between other songs if 
-                necessary. Otherwise, the song will be added to the end of the list.
+                necessary. Otherwise, the song will be added to the end of the
+                list.
         """
         if position is None:
             self.tracks.append(song)
@@ -83,10 +84,22 @@ class Artist:
         """
         self.albums.append(album)
 
+
+# brute force search
+def find_object(field, object_list):
+    """Check 'objct_list', to see if an object wuth a 'name' attribute equal to
+    the 'field' exists, return it if so.
+    """
+    for item in object_list:
+        if item.name == field:
+            return item
+    return None
+
+
 # Bootstrap data from .txt file
 def load_data():
     new_artist = None
-    new_ablum = None
+    new_album = None
     artist_list = []
 
     with open("albums.txt", "r") as albums:
@@ -97,8 +110,58 @@ def load_data():
             
             # mapping data from unpacked tuple
             year_field = int(year_field)
-            print(artist_field, album_field, year_field, song_field)
+            print("{}:{}:{}:{}".format(artist_field, album_field, year_field, song_field))
+
+            if new_artist is None:
+                new_artist = Artist(artist_field)
+                artist_list.append(new_artist)
+            elif new_artist.name != artist_field:
+                # We've just read details for a new artist
+                # retrieve artist object if there is one
+                # otherwise ecreatea new artist object and add to the
+                # artist list.
+                new_artist = find_object(artist_field, artist_list)
+                if new_artist == None:
+                    new_artist = Artist(artist_field)
+                    artist_list.append(new_artist)
+                new_album = None
+
+            if new_album is None:
+                new_album = Album(album_field, year_field, new_artist)
+                new_artist.add_album(new_album)
+            elif new_album.name != album_field:
+                # We've just read a new album for the current artist
+                # retrive teh album object if there is one, otherwise
+                # create a new album object and store it in the artist's
+                # collection
+                new_album = find_object(album_field, new_artist.albums)
+                if new_album == None:
+                    new_album = Album(album_field, year_field, new_artist)
+                    new_artist.add_album(new_album)
+
+            # create new song object and add it to the current album's
+            # collection
+            new_song = Song(song_field, new_artist)
+            new_album.add_song(new_song)
+
+    return artist_list
+
+
+def create_checkfile(artist_list):
+    """Create a check file from the object data for comparison with the 
+    original file
+    """
+    with open("checkfile.txt", 'w') as checkfile:
+        for new_artist in artist_list:
+            for new_album in new_artist.albums:
+                for new_song in new_album.tracks:
+                    print("{0.name}\t{1.name}\t{1.year}\t{2.title}".format(
+                        new_artist, new_album, new_song), file=checkfile)
+
 
 # Execute only if the program is run as a script
 if __name__ == '__main__':
-    load_data()
+    artists = load_data()
+    print("There are {} artists".format(len(artists)))
+
+    create_checkfile(artists)
