@@ -37,5 +37,15 @@ class Enemy:
 
 # Generation of a subclass
 class Troll(Enemy):
-    """Subclass inherited from Enemy"""
-    pass
+    """Subclass inherited from Enemy
+    
+    Methods:
+        grunt: Prints a taunt using the troll's name
+    """
+    
+    # example init from superclass (using super())
+    def __init__(self, name):
+        super().__init__(name=name, lives=1, hit_points=23)
+
+    def grunt(self):
+        print("Me {0.name}. {0.name} stromp you!".format(self))
