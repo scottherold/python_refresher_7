@@ -10,6 +10,8 @@ class Player(object):
     Methods:
         _get_lives: returns the player's current lives
         _set_lives: updates the player's current lives
+        _get_level: return's the player's current level
+        _set_level: updates the player's current level and score
         __str__: prints a string representation of the object
 
     Properties:
@@ -18,7 +20,7 @@ class Player(object):
     def __init__(self, name):
         self.name = name
         self._lives = 3 # designated private attribute (hides from public)
-        self.level = 1
+        self._level = 1
         self.score = 0
 
     def _get_lives(self):
@@ -31,7 +33,20 @@ class Player(object):
             print('Lives cannot be negative')
             self._lives = 0
 
-    lives = property(_get_lives, _set_lives) # public property
+    def _get_level(self):
+        return self._level
+
+    def _set_level(self, level):
+        if level > 0:
+            delta = level - self._level
+            self.score += delta * 1000
+            self._level = level
+        else:
+            print('Level cannot be less than 1')
+
+    # public properties
+    lives = property(_get_lives, _set_lives)
+    level = property(_get_level, _set_level)
 
     # called by using the variable name for the instantiated object
     def __str__(self):
