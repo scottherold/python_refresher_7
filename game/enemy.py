@@ -17,27 +17,33 @@ class Enemy:
     
     def __init__(self, name="Enemy", hit_points=0, lives=1):
         self.name = name
-        self.hit_points = hit_points
+        self.initial_hit_points = hit_points
+        self.current_hit_points = hit_points
         self.lives = lives
+        self.alive = True
 
     def take_damage(self, damage):
-        remaining_points = self.hit_points - damage
+        remaining_points = self.current_hit_points - damage
         if remaining_points >= 0:
-            self.hit_points = remaining_points
+            self.current_hit_points = remaining_points
             print("I took {} points damage and have {} left".format(damage,
-                self.hit_points))
+                self.current_hit_points))
         else:
+            self.lives -= 1
             if self.lives > 0:
-                self.lives -= 1
+                self.current_hit_points = self.initial_hit_points
+                print("{0.name} lost a life!".format(self))
             else:
-                print("Game Over!")
+                print("{0.name} is dead!".format(self))
+                self.alive = False
 
     def __str__(self):
-        return "Name: {0.name}, Lives: {0.lives}, Hit Points: {0.hit_points}".format(self)
+        return "Name: {0.name}, Lives: {0.lives}, Hit Points: {0.current_hit_points}".format(self)
+
 
 # Generation of a subclass
 class Troll(Enemy):
-    """Subclass inherited from Enemy
+    """Subclass inherited from Enemy. Trolls have 23 hit_points.
     
     Methods:
         grunt: Prints a taunt using the troll's name
@@ -49,3 +55,11 @@ class Troll(Enemy):
 
     def grunt(self):
         print("Me {0.name}. {0.name} stromp you!".format(self))
+
+
+class Vampire(Enemy):
+    """Subclass inherited from Enemy. Vampires have 3 lives and 12 hit_points
+    """
+
+    def __init__(self, name):
+        super().__init__(name=name, lives=3, hit_points=12)

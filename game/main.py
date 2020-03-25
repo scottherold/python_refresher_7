@@ -1,4 +1,4 @@
-from enemy import Enemy, Troll
+from enemy import Enemy, Troll, Vampire
 
 ugly_troll = Troll("Pug")
 print("Ugly troll - {}".format(ugly_troll))
@@ -13,6 +13,28 @@ ugly_troll.grunt()
 another_troll.grunt()
 brother.grunt()
 
-# This will not work
-monster = Enemy("Basic enemy")
-monster.grunt()
+ugly_troll.take_damage(5)
+another_troll.take_damage(10)
+brother.take_damage(3)
+
+print(ugly_troll)
+print(another_troll)
+print(brother)
+
+print("=" * 60)
+
+pierre = Vampire("Pierre")
+vlad = Vampire("Vlad")
+vamp = Vampire("Drac")
+
+print("Creepy vampire - {}".format(pierre))
+print("Evil vampire - {}".format(vlad))
+
+pierre.take_damage(7)
+vlad.take_damage(3)
+print(pierre)
+print(vlad)
+
+while vamp.alive:
+    vamp.take_damage(1)
+    print(vamp)
