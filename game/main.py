@@ -27,3 +27,6 @@ print(scott)
 
 scott.level = 3
 print(scott)
+
+scott.score = 500
+print(scott)

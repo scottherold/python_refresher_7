@@ -16,12 +16,13 @@ class Player(object):
 
     Properties:
         lives: public access to lives attribute
+        level: public access to level attribute
     """
     def __init__(self, name):
         self.name = name
         self._lives = 3 # designated private attribute (hides from public)
         self._level = 1
-        self.score = 0
+        self._score = 0
 
     def _get_lives(self):
         return self._lives
@@ -39,7 +40,7 @@ class Player(object):
     def _set_level(self, level):
         if level > 0:
             delta = level - self._level
-            self.score += delta * 1000
+            self._score += delta * 1000
             self._level = level
         else:
             print('Level cannot be less than 1')
@@ -47,6 +48,16 @@ class Player(object):
     # public properties
     lives = property(_get_lives, _set_lives)
     level = property(_get_level, _set_level)
+
+    # public properties set using decorators
+    @property
+    def score(self):
+        return self._score
+
+    # syntax for setter decorator
+    @score.setter
+    def score(self, score):
+        self._score = score
 
     # called by using the variable name for the instantiated object
     def __str__(self):
