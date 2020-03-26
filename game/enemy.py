@@ -6,8 +6,10 @@ class Enemy:
     
     Attributes:
         name (str): The name of the enemy
-        hit_points (int): The current hit points of an enemy
+        initial_hit_points (int): the starting hit points on an enemy
+        current_hit_points (int): The current hit points of an enemy
         lives (int): The current number of lives of the enemy
+        alive (boolean): Tracks if the enemy is alive (True) or dead (false)
 
     Methods:
         take_damage: Takes an integer as an argument (as damage). Checks to
@@ -67,7 +69,7 @@ class Vampire(Enemy):
         dodges: Generates a random number between 1 and 3. If the result is 3,
         the vampire dodges the attack.
 
-        take_damage: overriden from the Enemy super class. Applies the dodge
+        take_damage: overridden from the Enemy super class. Applies the dodge
         method before apply damage to the vampire hit_points
     """
 
@@ -85,3 +87,27 @@ class Vampire(Enemy):
     def take_damage(self, damage):
         if not self.dodges():
             super().take_damage(damage=damage)
+
+
+class VampireKing(Vampire):
+    """Subclass inherited from Vampire.
+
+    Attributes:
+        initial_hit_points (int): inherited from enemy super class. The 
+        VampireKing subclass starts with 140 hit points.
+        current_hit_points (int): inherited from enemy super class.
+    
+    Methods:
+        take_damage: overrideen from the vampire class. Reduces damage to 1/4
+        the inputted integer from the damage argument
+    """
+
+    def __init__(self, name):
+        super().__init__(name=name)
+        self.initial_hit_points = 140
+        self.current_hit_points = 140
+
+    # method overriding
+    def take_damage(self, damage):
+        super().take_damage(damage // 4)
+
