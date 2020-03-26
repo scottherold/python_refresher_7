@@ -30,11 +30,6 @@ vamp = Vampire("Drac")
 print("Creepy vampire - {}".format(pierre))
 print("Evil vampire - {}".format(vlad))
 
-pierre.take_damage(7)
-vlad.take_damage(3)
-print(pierre)
-print(vlad)
-
-while vamp.alive:
-    vamp.take_damage(1)
-    print(vamp)
+# while vamp.alive:
+#     vamp.take_damage(1)
+#     print(vamp)

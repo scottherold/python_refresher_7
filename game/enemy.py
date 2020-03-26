@@ -1,3 +1,6 @@
+import random
+
+
 class Enemy:
     """Class to represent a basic enemey to the player
     
@@ -59,7 +62,26 @@ class Troll(Enemy):
 
 class Vampire(Enemy):
     """Subclass inherited from Enemy. Vampires have 3 lives and 12 hit_points
+
+    Methods:
+        dodges: Generates a random number between 1 and 3. If the result is 3,
+        the vampire dodges the attack.
+
+        take_damage: overriden from the Enemy super class. Applies the dodge
+        method before apply damage to the vampire hit_points
     """
 
     def __init__(self, name):
         super().__init__(name=name, lives=3, hit_points=12)
+
+    def dodges(self):
+        if random.randint(1, 3) == 3:
+            print("****** {0.name} dodges ******".format(self))
+            return True
+        else:
+            return False
+
+    # method overriding
+    def take_damage(self, damage):
+        if not self.dodges():
+            super().take_damage(damage=damage)
