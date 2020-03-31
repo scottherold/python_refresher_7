@@ -67,13 +67,43 @@ class Penguin(object):
     def quack(self):
         print("Are you 'avin a laugh? I'm a penguin!")
 
-# def test_duck(duck):
-#     duck.walk()
-#     duck.swim()
-#     duck.quack()
+
+class Flock(object):
+    """ Class to represent a flock of birds 
+
+    Attributes:
+        flock (list[Duck]): A list of duck objects
+    
+    Methods:
+        add_duck: add a new duck to the flock attribute
+        migrate: iterates through the flock, and calls each duck's fly method
+    """
+    def __init__(self):
+        self.flock = []
+
+    # Python 'Hint'; this tells the programmer to only accept Duck
+    # that this method only accepts Duck types, and the arrow signifies
+    # that there is no return type (return type of None) for the method
+    # Hints DO NOT restrict parameters of different types to be passed
+    # into the method
+    def add_duck(self, duck: Duck) -> None:
+        self.flock.append(duck)
+
+    def migrate(self):
+        problem = None
+        for duck in self.flock:
+            # try/catch for non-ducks added to flock
+            try:
+                duck.fly()
+            except AttributeError as e:
+                print('One duck down')
+                problem = e
+        if problem:
+            # raises the exception, so the stack trace is still
+            # provided for the error. This allows the code to continue
+            # executing, while still demonstrating the error
+            raise problem
 
 if __name__ == '__main__':
     donald = Duck()
     donald.fly()
-
-    # percy = Penguin()
