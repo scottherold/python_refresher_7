@@ -56,7 +56,11 @@ class Penguin(object):
         walk: prints a string representing the penguin waddling
         swim: prints a string representing the penguin swimming
         quack: prints a string representing the penguin quacking
+        aviate: overrites fly method with penguin's version of 'fly'
     """
+
+    def __init__(self):
+        self.fly = self.aviate
 
     def walk(self):
         print("Waddle, waddle, I waddle too")
@@ -66,6 +70,14 @@ class Penguin(object):
 
     def quack(self):
         print("Are you 'avin a laugh? I'm a penguin!")
+
+    def aviate(self):
+        print("I won the lottery and bought a learjet")
+
+
+class Mallard(Duck):
+    """Example class to show why not to validate input in the Flock class""" 
+    pass
 
 
 class Flock(object):
@@ -87,7 +99,23 @@ class Flock(object):
     # Hints DO NOT restrict parameters of different types to be passed
     # into the method
     def add_duck(self, duck: Duck) -> None:
-        self.flock.append(duck)
+        # refactored to validate input argument. Is instance ensure that
+        # the current instance of the argument being passed is an
+        # instance of the class provided as the second argument
+        # this isn't exactly 'Pythonic'
+        # if isinstance(duck, Duck) is Duck:
+        #     self.flock.append(duck)
+
+        # The following method is he Pythonic way of checking if the
+        # variable provided within the argument is valid. This is done
+        # by checking if the object passed in has the method to be used
+        # by the methods within the class (in this case fly, for
+        # migrate)
+        fly_method = getattr(duck, 'fly', None)
+        if callable(fly_method):
+            self.flock.append(duck)
+        else:
+            raise TypeError("Cannot add duck, are you sure it's not a " + str(type(duck).__name__))
 
     def migrate(self):
         problem = None
@@ -95,6 +123,9 @@ class Flock(object):
             # try/catch for non-ducks added to flock
             try:
                 duck.fly()
+                # raising errors inside your try block is a good way to
+                # to check your exception handlers
+                # raise AttributeError("Testing exception handler in migrate") # TODO remove this before release
             except AttributeError as e:
                 print('One duck down')
                 problem = e
